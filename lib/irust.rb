@@ -40,6 +40,8 @@ RUST
   end
 
   def eval(line)
+    exit 0 if line.nil?
+
     Dir.mktmpdir do |tmpdir|
       input_src = File.join(tmpdir, "irust.rs")
       File.write input_src, rust_program(line)
