@@ -21,9 +21,9 @@ fn main() {
   #{hist};
 RUST
     if %w(let fn).include? line.split[0]
-      q = line.split(/=|\s/)[1]
+      q = line.split(/=|\s|\(/)[1]
       if q == "mut"
-        q = line.split(/=|\s/)[2]
+        q = line.split(/=|\s|\(/)[2]
       end
       p += <<-RUST
   #{line};
