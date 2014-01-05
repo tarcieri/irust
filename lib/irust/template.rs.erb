@@ -1,13 +1,11 @@
 #[feature(globs, macro_rules, struct_variant)];
 extern mod extra;
 
-fn main() {
-  fn type_of<T>(_: &T) -> &'static str {
-    unsafe {
-      (*std::unstable::intrinsics::get_tydesc::<T>()).name
-    }
-  } struct Foo<T>(T);
+fn type_of<T>(_: &T) -> &'static str {
+  unsafe { (*std::unstable::intrinsics::get_tydesc::<T>()).name }
+}
 
+fn main() {
   <%= history %>;
   
   <% if let_var %>
