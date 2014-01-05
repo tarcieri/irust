@@ -41,6 +41,7 @@ Now that you have iRust installed, run:
 
 This should give you the following prompt:
 
+    Using rustc 0.9-pre (619c4fc 2013-12-23 11:26:34 -0800)
     irust>
 
 Now type some fancy Rust expressions and watch them get magically evaluated

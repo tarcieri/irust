@@ -7,6 +7,15 @@ require "irust/template_renderer"
 module IRust
   module_function
 
+  def detect_rust
+    rust_version = `rustc -v`
+    puts "Using #{rust_version.split("\n").first}"
+  rescue Errno::ENOENT
+    STDERR.puts "No rustc detected! Please install Rust first!"
+    STDERR.puts "See the Quick Start at: https://github.com/mozilla/rust/blob/master/README.md"
+    exit 1
+  end
+
   def read
     Readline.readline("irust> ", true)
   end
@@ -45,6 +54,7 @@ module IRust
   end
 
   def run
+    detect_rust
     history = ""
     loop { history = eval read, history }
   end
