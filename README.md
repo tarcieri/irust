@@ -47,7 +47,7 @@ Now type some fancy Rust expressions and watch them get magically evaluated
 before your eyes!
 
     irust> 2+2
-    4
+    4 : int
     irust>
 
 Technology!
@@ -60,5 +60,5 @@ Technology!
 
 ## License
 
-Copyright (c) 2013 Tony Arcieri. Distributed under the MIT License. See
+Copyright (c) 2014 Tony Arcieri. Distributed under the MIT License. See
 LICENSE.txt for further details.
