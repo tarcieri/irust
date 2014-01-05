@@ -1,3 +1,7 @@
+1.1.1 (2014-01-05)
+------------------
+* Detect and display installed Rust version
+
 1.1.0 (2014-01-05)
 ------------------
 * Keep a basic history
