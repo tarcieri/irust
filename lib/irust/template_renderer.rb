@@ -11,19 +11,12 @@ module IRust
     end
 
     def render
-      template = ERB.new File.read(RUST_TEMPLATE)
-      template.result(binding)
+      template = File.read(RUST_TEMPLATE)
+      ERB.new(template).result(binding)
     end
 
     def let_var
-      line = rust_code
-      if %w(let fn).include? line.split[0]
-        q = line.split(%r{=|\s|\(})[1]
-        if q == "mut"
-          q = line.split(%r{=|\s|\(})[2]
-        end
-        q
-      end
+      rust_code[/^\s*(let|fn)\s+(mut\s+)?(\w+)/, 3]
     end
   end
 end
