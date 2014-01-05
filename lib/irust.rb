@@ -2,6 +2,8 @@ require "readline"
 require "tmpdir"
 require "open3"
 
+require "irust/template_renderer"
+
 module IRust
   module_function
 
@@ -9,37 +11,8 @@ module IRust
     Readline.readline("irust> ", true)
   end
 
-  def rust_program(hist, line)
-    p = <<-RUST
-#[feature(globs, macro_rules, struct_variant)];
-extern mod extra;
-
-fn main() {
-  fn type_of<T>(_: &T) -> &'static str { unsafe {
-    (*std::unstable::intrinsics::get_tydesc::<T>()).name } } struct
-    Foo<T>(T);
-  #{hist};
-RUST
-    if %w(let fn).include? line.split[0]
-      q = line.split(%r{=|\s|\(})[1]
-      if q == "mut"
-        q = line.split(%r{=|\s|\(})[2]
-      end
-      p += <<-RUST
-  #{line};
-  println!("#{q} = {:?} : {:s}", #{q}, type_of(&#{q}))
-}
-RUST
-    else
-      p += <<-RUST
-  let _it = {
-    #{line}
-  };
-  println!("{:?} : {:s}", _it, type_of(&_it))
-}
-RUST
-    end
-    p
+  def rust_program(line, history)
+    IRust::TemplateRenderer.new(line, history).render
   end
 
   def compile(tmpdir)
@@ -55,25 +28,25 @@ RUST
     end
   end
 
-  def eval(hist, line)
+  def eval(line, history = nil)
     exit 0 if line.nil?
 
     Dir.mktmpdir do |tmpdir|
       input_src = File.join(tmpdir, "irust.rs")
-      File.write input_src, rust_program(hist, line)
+      File.write input_src, rust_program(line, history)
 
       if compile(tmpdir)
         system input_src.sub(/\.rs$/, '')
-        hist + ";\n" + line
+        history + ";\n" + line
       else
-        hist
+        history
       end
     end
   end
 
   def run
-    hist = ""
-    loop { hist = eval hist, read }
+    history = ""
+    loop { history = eval read, history }
   end
 end
 

@@ -1,0 +1,20 @@
+#[feature(globs, macro_rules, struct_variant)];
+extern mod extra;
+
+fn main() {
+  fn type_of<T>(_: &T) -> &'static str {
+    unsafe {
+      (*std::unstable::intrinsics::get_tydesc::<T>()).name
+    }
+  } struct Foo<T>(T);
+
+  <%= history %>;
+  
+  <% if let_var %>
+  <%= rust_code %>;
+  println!("<%= let_var%> = {:?} : {:s}", <%= let_var %>, type_of(&<%= let_var %>));
+  <% else %>
+  let _result = { <%= rust_code %> };
+  println!("{:?} : {:s}", _result, type_of(&_result));
+  <% end %>
+}
