@@ -1,3 +1,7 @@
+1.1.2 (2014-01-23)
+------------------
+* Display failing program (with line numbers) for debugging assistance
+
 1.1.1 (2014-01-05)
 ------------------
 * Detect and display installed Rust version
