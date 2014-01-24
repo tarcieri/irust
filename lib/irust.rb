@@ -1,6 +1,7 @@
 require "readline"
 require "tmpdir"
 require "open3"
+require "colorize"
 
 require "irust/template_renderer"
 
@@ -24,16 +25,20 @@ module IRust
     IRust::TemplateRenderer.new(line, history).render
   end
 
-  def compile(tmpdir)
+  def compile(tmpdir, src)
     Dir.chdir(tmpdir) do
       stdin, stderr, status = Open3.capture3("rustc irust.rs")
+      return true if status.success?
 
-      if status.success?
-        true
-      else
-        STDERR.puts stderr
-        false
+      error = "--- BEGIN FAILED PROGRAM ---\n"
+      src.split("\n").each_with_index do |line, i|
+          error << "#{i + 1}: #{line}\n"
       end
+      error << "---- END FAILED PROGRAM ----"
+
+      STDERR.puts error.red
+      STDERR.puts stderr
+      false
     end
   end
 
@@ -41,11 +46,12 @@ module IRust
     exit 0 if line.nil?
 
     Dir.mktmpdir do |tmpdir|
-      input_src = File.join(tmpdir, "irust.rs")
-      File.write input_src, rust_program(line, history)
+      src     = rust_program(line, history)
+      srcfile = File.join(tmpdir, "irust.rs")
+      File.write(srcfile, src)
 
-      if compile(tmpdir)
-        system input_src.sub(/\.rs$/, '')
+      if compile(tmpdir, src)
+        system srcfile.sub(/\.rs$/, '')
         history + ";\n" + line
       else
         history
