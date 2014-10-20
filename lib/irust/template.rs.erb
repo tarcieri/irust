@@ -1,8 +1,8 @@
-#[feature(globs, macro_rules, struct_variant)];
-extern mod extra;
+#![feature(globs, macro_rules, struct_variant)]
+extern crate debug;
 
 fn type_of<T>(_: &T) -> &'static str {
-  unsafe { (*std::unstable::intrinsics::get_tydesc::<T>()).name }
+  unsafe { (*std::intrinsics::get_tydesc::<T>()).name }
 }
 
 fn main() {
