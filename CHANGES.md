@@ -1,3 +1,7 @@
+1.2.0 (2015-04-05)
+------------------
+* Support for Rust 1.0.0-beta
+
 1.1.2 (2014-01-23)
 ------------------
 * Display failing program (with line numbers) for debugging assistance
