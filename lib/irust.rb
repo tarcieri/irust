@@ -9,7 +9,7 @@ module IRust
   module_function
 
   def detect_rust
-    rust_version = `rustc -v`
+    rust_version = `rustc --version`
     puts "Using #{rust_version.split("\n").first}"
   rescue Errno::ENOENT
     STDERR.puts "No rustc detected! Please install Rust first!"
